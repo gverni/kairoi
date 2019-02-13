@@ -14,15 +14,12 @@
         <script src="https://d3js.org/d3.v5.js"></script>
         <!-- Labella lib -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/labella/1.1.4/labella.min.js" integrity="sha256-TVlbFZ0t163FVM1iJvt6GnncuUisz33i39x1Z6gDEps=" crossorigin="anonymous"></script>
-
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        
-
-
+        <div id="timeline"></div>
         <script>
 
             // ---------------------------------------------------
@@ -70,8 +67,8 @@
             // ---------------------------------------------------
 
             vis.append('line')
-            .classed('timeline', true)
-            .attr('x2', innerWidth);
+            .attr('x2', innerWidth)
+            .attr('stroke', 'black')
 
             var linkLayer = vis.append('g');
             var labelLayer = vis.append('g');
