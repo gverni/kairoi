@@ -4,5 +4,8 @@
   "description": "Project Timelines made easy",
   "main": "index.js",
   "license": "MIT",
-  "author": "gverni"
+  "author": "gverni",
+  "dependencies": {
+    "labella": "^1.1.4"
+  }
 }
