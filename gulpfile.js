@@ -63,11 +63,11 @@ gulp.task('development', gulp.series(
       reloadOnRestart: true,
       https: false,
       server: ['./'],
-      startPath: 'test/test.html'
+      startPath: 'playground/test.html'
     })
     gulp.watch([
       'dist/*',
-      'test/*'
+      'plaground/*'
     ]).on('change', browserSync.reload)
   }
 ))
