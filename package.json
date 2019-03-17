@@ -6,6 +6,26 @@
   "license": "MIT",
   "author": "gverni",
   "dependencies": {
+    "d3": "^5.9.1",
     "labella": "^1.1.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-core": "^6.26.3",
+    "browser-sync": "^2.26.3",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-eslint": "^5.0.0",
+    "karma": "^4.0.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-qunit": "^3.0.0",
+    "qunit": "^2.9.2"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "lint": "gulp lint",
+    "start": "gulp development",
+    "test": "karma start karma.conf.js --single-run"
   }
 }
