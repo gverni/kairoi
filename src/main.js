@@ -12,8 +12,9 @@ class Kairoi {
       startTimeline: undefined,
       endTimeline: undefined,
       dotColor: 'black',
-      dotRadius: 3 ,
-      labella: {}
+      dotRadius: 3,
+      labella: {},
+      labelPadding: {top: 0, right: 0, bottom: 0, left: 0}
     }
     this._properties = {
       innerWidth: this._options.initialWidth - this._options.margin.left - this._options.margin.right,
@@ -146,8 +147,36 @@ class Kairoi {
     return this
   }
 
-  _drawLabels() {
+  _createLabellaNodes () {
     const options = this._options
+    const properties = this._properties
+
+    const timePos = d => properties.axisScale(d.date)
+
+    const dummyText = this._getLayer('dummy').append('text')
+      .classed('label-text', true)
+
+    const data = this._data
+    const nodes = data.map(d => {
+      const bbox = dummyText
+        .text(d.label)
+        .node()
+        .getBBox()
+      const w = bbox.width + options.labelPadding.left + options.labelPadding.right
+      const h = bbox.height + options.labelPadding.top + options.labelPadding.bottom
+      const node = new labella.Node(timePos(d), w, d)
+      node.w = w
+      node.h = h
+      return node
+    })
+
+    dummyText.remove()
+    return nodes
+  }
+
+  _drawLabels () {
+    const options = this._options
+    this._force = new labella.Force(options.labella)
   }
 
   draw () {
