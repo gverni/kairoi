@@ -14,6 +14,7 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/d3/dist/d3.js',
+      'node_modules/labella/dist/labella.js',
       'dist/*.js',
       'test/**/*.js'
     ],
