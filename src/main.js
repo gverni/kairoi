@@ -71,7 +71,6 @@ class Kairoi {
 
     this._getLayer('axis')
     .attr('width', options.initialWidth - 600)
-    .attr('transform', 'translate(' + (0) + ',' + (properties.innerHeight) + ')')
     .call(axis)
 
     // const options = this.options();
@@ -119,7 +118,6 @@ class Kairoi {
     const timePos = d => properties.axisScale(d.date)
 
     const sUpdate = this._getLayer('dot')
-     .attr('transform', 'translate(' + (0) + ',' + (properties.innerHeight) + ')')
      .selectAll('circle.dot')
      .data(data)
 
@@ -187,61 +185,9 @@ class Kairoi {
     .append('svg')
     .attr('width', options.initialWidth)
     .attr('height', options.initialHeight)
-    // .append('g')
-    // .attr('transform', 'translate(' + options.margin.left + ',' + (options.margin.top + this._innerHeight) + ')')
-
-    // if (options.direction === 'up' || options.direction === 'down') {
-    //   if (!options.labella.maxPos) {
-    //     options.labella.maxPos = options.initialWidth - options.margin.left - options.margin.right
-    //     if (!options.labella.density) {options.labella.density = 1}
-    //   }
-    // }
-
-    // if(options.domain){
-    //   options.scale.domain(options.domain);
-    // }
-    // else{
-    //   options.scale
-    //     .domain(extent(data, options.timeFn))
-    //     .nice();
-    // }
-    // options.scale.range([0, (options.direction==='left' || options.direction==='right')
-    //   ? this.getInnerHeight()
-    //   : this.getInnerWidth()]
-    // );
-    // const labelTextStyle = helper.extend({}, options.textStyle);
-    // Object.keys(labelTextStyle).forEach(key => {
-    //   labelTextStyle[key] = helper.functor(labelTextStyle[key]);
-    // });
-    // // for backward compatibility
-    // labelTextStyle.fill = labelTextStyle.fill || helper.functor(options.labelTextColor);
-
-    // const dummyText = this.layers.get('dummy').append('text')
-    //   .classed('label-text', true);
-
-    // const timePos = d => options.scale(options.timeFn(d));
-    // const nodes = data.map(d => {
-    //   const bbox = dummyText
-    //     .call(this.updateLabelText, labelTextStyle, d)
-    //     .node()
-    //     .getBBox();
-    //   const w = bbox.width + options.labelPadding.left + options.labelPadding.right;
-    //   const h = bbox.height + options.labelPadding.top + options.labelPadding.bottom;
-    //   const node = new labella.Node(
-    //     timePos(d),
-    //     (options.direction==='left' || options.direction==='right') ? h : w,
-    //     d
-    //   );
-    //   node.w = w;
-    //   node.h = h;
-    //   return node;
-    // });
-
-    // dummyText.remove();
-
-    // this.force.options(options.labella)
-    //   .nodes(nodes)
-    //   .compute();
+    .append('g')
+    .classed('main-layer', true)
+    .attr('transform', 'translate(' + options.margin.left + ',' + (options.margin.top + properties.innerHeight) + ')')
 
     // this.drawAxes();
     // this.drawDots(data);
