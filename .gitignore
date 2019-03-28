@@ -89,3 +89,6 @@ typings/
 
 # Local files
 local/
+
+# Local libs
+libs/
