@@ -11,8 +11,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
         <!-- D3 lib -->
-        <script src="https://d3js.org/d3.v5.js"></script>
-        <!-- Kairos -->
+        <!-- <script src="https://d3js.org/d3.v5.js"></script> -->
+        <script src="libs/d3.js"></script>
+        <!-- Labella lib -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/labella/1.1.4/labella.js"></script> -->
+        <script src="libs/labella.js"></script>
+        <!-- Kairoi -->
         <script src="../dist/main.js"></script>
     </head>
     <body>
@@ -21,19 +25,17 @@
         <![endif]-->
         <div id="timeline"></div>
         <script>
-        
+
             var testData = [
-                {date: new Date('01 January 2019'), label: 'First milestone', color: 'green'},
-                {date: new Date('01 February 2019'), label: 'Second milestone', color: 'blue'},
-                {date: new Date('01 March 2019'), label: 'Third milestone', color: 'yellow'},
-                {date: new Date('01 April 2019'), label: 'Forth milestone', color: 'green'},
-                {date: new Date('01 May 2019'), label: 'Fifth milestone', color: 'red'}
+                {date: new Date('01 January 2019'), label: 'First / green', labelBgColor: 'green'},
+                {date: new Date('06 January 2019'), label: 'Second / green', labelBgColor: 'green'},
+                {date: new Date('05 April 2019'), label: 'Third / red', labelBgColor: 'red'},
+                {date: new Date('01 May 2019'), label: 'Fourth / red', labelBgColor: 'red'}
             ]
-            var timeline = new Kairoi()
-            timeline.data = testData
-            timeline.target = '#timeline'
+            var timeline = new Kairoi('#timeline')
+            timeline.data(testData)
             timeline.draw()
-        
+
         </script>
     </body>
 </html>
