@@ -31,6 +31,6 @@ QUnit.test('Check axis range', function (assert) {
 
 QUnit.test('Check dots', function (assert) {
   let dots = document.querySelectorAll('SVG .dot-layer circle')
-  assert.equal(dots[0].attributes['cx'].value, '18.101223949718822')
-  assert.equal(dots[dots.length - 1].attributes['cx'].value, '1103.7975521005624')
+  assert.ok(parseFloat(Math.abs(dots[0].attributes['cx'].value) - 18.101223949718822) < 0.5)
+  assert.ok(parseFloat(Math.abs(dots[dots.length - 1].attributes['cx'].value) - '1103.7975521005624') < 0.5)
 })
