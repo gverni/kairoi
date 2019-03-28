@@ -71,3 +71,8 @@ gulp.task('development', gulp.series(
     ]).on('change', browserSync.reload)
   }
 ))
+
+gulp.task('docs', gulp.series('build', function copyToDocs () {
+  return gulp.src('dist/kairoi.js')
+    .pipe(gulp.dest('docs/javascripts'))
+}))
