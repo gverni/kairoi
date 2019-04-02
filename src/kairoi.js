@@ -45,7 +45,13 @@ class Kairoi {
 
     const mergeObjects = function (dest, source) {
       Object.keys(source).forEach(key => {
-        if (dest[key]) { dest[key] = (typeof source[key] === 'object' ? mergeObjects(dest[key], source[key]) : source[key]) }
+        if (dest[key]) {
+          let sourceValue = source[key]
+          if (typeof sourceValue === 'object') {
+            sourceValue = mergeObjects(dest[key], sourceValue)
+          }
+          dest[key] = sourceValue
+        }
       })
       return dest
     }
