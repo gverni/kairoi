@@ -68,7 +68,7 @@ Optionally you can specify:
 
 * `labelBgColor`: this specify the bakground color of the label. You can use any CSS value for this. 
 
-See more at API documentation
+See more at [API documentation](https://github.com/gverni/kairoi/wiki/API-Documentation)
 
 ## Demo 
 
