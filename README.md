@@ -86,3 +86,4 @@ If you are migrating from `d3kit-timeline` please note:
 * No `chart.on()` doesn't work (in roadmap for implementation)
 * The method `options()` has been replaced by 'setOptions()`
 * The method `resizeToFit()` is not implemented
+* The `textStyle` is no longer supported. Partial support is provided by `labelTextStyle`
