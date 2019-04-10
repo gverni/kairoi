@@ -40,14 +40,19 @@ function getUrlParameter(name) {
       let parsedRow = row.split('|');
 
       if (parsedRow.length >= 2) {
-        tmpMilestone.date = new Date(parsedRow[0].trim());
-        tmpMilestone.milestone = parsedRow[1].trim();
+        try {
+          tmpMilestone.date = new Date(parsedRow[0].trim());
+          if (tmpMilestone.date.toString() === 'Invalid Date') { throw new Error('Invalid date') }; // IE10 fix: This can be made more robust
+          tmpMilestone.milestone = parsedRow[1].trim();
 
-        if (parsedRow.length === 3) {
-          tmpMilestone.labelBgColor = parsedRow[2].trim();
+          if (parsedRow.length === 3) {
+            tmpMilestone.labelBgColor = parsedRow[2].trim();
+          }
+
+          data.push(tmpMilestone);
+        } catch (e) {
+          console.log('Error processing row:\n>> ' + row + '\n' + e)
         }
-
-        data.push(tmpMilestone);
       }
     });
     var chart = new Kairoi('#project-timeline', {
