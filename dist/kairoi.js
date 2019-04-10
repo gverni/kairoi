@@ -70,7 +70,13 @@ function () {
       var mergeObjects = function mergeObjects(dest, source) {
         Object.keys(source).forEach(function (key) {
           if (dest[key]) {
-            dest[key] = _typeof(source[key]) === 'object' ? mergeObjects(dest[key], source[key]) : source[key];
+            var sourceValue = source[key];
+
+            if (_typeof(sourceValue) === 'object') {
+              sourceValue = mergeObjects(dest[key], sourceValue);
+            }
+
+            dest[key] = sourceValue;
           }
         });
         return dest;
@@ -98,7 +104,7 @@ function () {
           initialHeight: 80,
           scale: d3.scaleTime(),
           domain: undefined,
-          // direction: 'up', // By default we only do 'up' timeline. After all this is a different project...
+          direction: 'up',
           dotRadius: 3,
           formatAxis: identity,
           layerGap: 60,
@@ -227,8 +233,28 @@ function () {
     value: function drawAxes() {
       var options = this.options();
       var axisTransform;
-      this.axis = d3.axisBottom();
-      axisTransform = 'translate(' + 0 + ',' + this.getInnerHeight() + ')';
+
+      switch (options.direction) {
+        case 'right':
+          this.axis = axisLeft();
+          axisTransform = 'translate(' + 0 + ',' + 0 + ')';
+          break;
+
+        case 'left':
+          this.axis = axisRight();
+          axisTransform = 'translate(' + this.getInnerWidth() + ',' + 0 + ')';
+          break;
+
+        case 'up':
+          this.axis = d3.axisBottom();
+          axisTransform = 'translate(' + 0 + ',' + this.getInnerHeight() + ')';
+          break;
+
+        case 'down':
+          this.axis = axisTop();
+          axisTransform = 'translate(' + 0 + ',' + 0 + ')';
+          break;
+      }
 
       this._getLayer('main').attr('transform', axisTransform); // TODO: We may want to get rid of it?
 
@@ -269,31 +295,51 @@ function () {
     value: function drawLabels(nodes, labelTextStyle) {
       var options = this.options();
       var nodeHeight;
-      nodeHeight = d3.max(nodes, rectHeight); // Calculate layerGap for labella renderer
 
-      var numLayers = 0;
-      var maxRectHeight = 0;
-      nodes.map(function (node) {
-        if (numLayers < node.layerIndex) {
-          numLayers = node.layerIndex;
-        }
+      if (options.direction === 'left' || options.direction === 'right') {
+        nodeHeight = d3.max(nodes, rectWidth);
+      } else {
+        nodeHeight = d3.max(nodes, rectHeight);
+      } // Calculate layerGap for labella renderer
 
-        if (node.h > maxRectHeight) {
-          maxRectHeight = node.h;
-        }
-      });
-      numLayers++;
-      options.layerGap = (this.getInnerHeight() - numLayers * maxRectHeight) / numLayers;
+
+      if (options.direction === 'up' || options.direction === 'down') {
+        var numLayers = 0;
+        var maxRectHeight = 0;
+        nodes.map(function (node) {
+          if (numLayers < node.layerIndex) {
+            numLayers = node.layerIndex;
+          }
+
+          if (node.h > maxRectHeight) {
+            maxRectHeight = node.h;
+          }
+        });
+        numLayers++;
+        options.layerGap = (this.getInnerHeight() - numLayers * maxRectHeight) / numLayers;
+      }
+
       var renderer = new labella.Renderer({
         nodeHeight: nodeHeight,
         layerGap: options.layerGap,
-        direction: 'up' // Set direction as constant. Original implmentation had this as options
-
+        direction: options.direction
       });
       renderer.layout(nodes);
 
       function nodePos(d) {
-        return 'translate(' + (d.x - d.dx / 2) + ',' + d.y + ')';
+        switch (options.direction) {
+          case 'right':
+            return 'translate(' + d.x + ',' + (d.y - d.dy / 2) + ')';
+
+          case 'left':
+            return 'translate(' + (d.x + nodeHeight - d.w) + ',' + (d.y - d.dy / 2) + ')';
+
+          case 'up':
+            return 'translate(' + (d.x - d.dx / 2) + ',' + d.y + ')';
+
+          case 'down':
+            return 'translate(' + (d.x - d.dx / 2) + ',' + d.y + ')';
+        }
       }
 
       var labelBgColor = function labelBgColor(data) {
@@ -384,11 +430,13 @@ function () {
       var data = this.data() || [];
       var options = this.options();
 
-      if (!options.labella.maxPos) {
-        options.labella.maxPos = options.initialWidth - options.margin.left - options.margin.right;
+      if (options.direction === 'up' || options.direction === 'down') {
+        if (!options.labella.maxPos) {
+          options.labella.maxPos = options.initialWidth - options.margin.left - options.margin.right;
 
-        if (!options.labella.density) {
-          options.labella.density = 1;
+          if (!options.labella.density) {
+            options.labella.density = 1;
+          }
         }
       }
 
@@ -400,7 +448,7 @@ function () {
         options.scale.domain(d3.extent(data, options.timeFn)).nice();
       }
 
-      options.scale.range([0, this.getInnerWidth()]);
+      options.scale.range([0, options.direction === 'left' || options.direction === 'right' ? this.getInnerHeight() : this.getInnerWidth()]);
 
       this._createNodes();
 
