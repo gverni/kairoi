@@ -71,7 +71,7 @@ class Kairoi {
         initialHeight: 80,
         scale: d3.scaleTime(),
         domain: undefined,
-        // direction: 'up', // By default we only do 'up' timeline. After all this is a different project...
+        direction: 'up',
         dotRadius: 3,
         formatAxis: identity,
         layerGap: 60,
@@ -190,9 +190,24 @@ class Kairoi {
     const options = this.options()
 
     let axisTransform
-    this.axis = d3.axisBottom()
-    axisTransform = 'translate(' + (0) + ',' + (this.getInnerHeight()) + ')'
-
+    switch (options.direction) {
+      case 'right':
+        this.axis = axisLeft()
+        axisTransform = 'translate(' + (0) + ',' + (0) + ')'
+        break
+      case 'left':
+        this.axis = axisRight()
+        axisTransform = 'translate(' + (this.getInnerWidth()) + ',' + (0) + ')'
+        break
+      case 'up':
+        this.axis = d3.axisBottom()
+        axisTransform = 'translate(' + (0) + ',' + (this.getInnerHeight()) + ')'
+        break
+      case 'down':
+        this.axis = axisTop()
+        axisTransform = 'translate(' + (0) + ',' + (0) + ')'
+        break
+    }
     this._getLayer('main')
       .attr('transform', axisTransform)
 
@@ -240,28 +255,41 @@ class Kairoi {
   drawLabels (nodes, labelTextStyle) {
     const options = this.options()
     let nodeHeight
-    nodeHeight = d3.max(nodes, rectHeight)
-
+    if (options.direction === 'left' || options.direction === 'right') {
+      nodeHeight = d3.max(nodes, rectWidth)
+    } else {
+      nodeHeight = d3.max(nodes, rectHeight)
+    }
     // Calculate layerGap for labella renderer
-    var numLayers = 0
-    var maxRectHeight = 0
-    nodes.map((node) => {
-      if (numLayers < node.layerIndex) { numLayers = node.layerIndex }
-      if (node.h > maxRectHeight) { maxRectHeight = node.h }
-    })
-    numLayers++
-    options.layerGap = (this.getInnerHeight() - (numLayers * maxRectHeight)) / numLayers
-
+    if (options.direction === 'up' || options.direction === 'down') {
+      var numLayers = 0
+      var maxRectHeight = 0
+      nodes.map((node) => {
+        if (numLayers < node.layerIndex) { numLayers = node.layerIndex }
+        if (node.h > maxRectHeight) { maxRectHeight = node.h }
+      })
+      numLayers++
+      options.layerGap = (this.getInnerHeight() - (numLayers * maxRectHeight)) / numLayers
+    }
     const renderer = new labella.Renderer({
       nodeHeight,
       layerGap: options.layerGap,
-      direction: 'up' // Set direction as constant. Original implmentation had this as options
+      direction: options.direction
     })
 
     renderer.layout(nodes)
 
     function nodePos (d) {
-      return 'translate(' + (d.x - d.dx / 2) + ',' + (d.y) + ')'
+      switch (options.direction) {
+        case 'right':
+          return 'translate(' + (d.x) + ',' + (d.y - d.dy / 2) + ')'
+        case 'left':
+          return 'translate(' + (d.x + nodeHeight - d.w) + ',' + (d.y - d.dy / 2) + ')'
+        case 'up':
+          return 'translate(' + (d.x - d.dx / 2) + ',' + (d.y) + ')'
+        case 'down':
+          return 'translate(' + (d.x - d.dx / 2) + ',' + (d.y) + ')'
+      }
     }
 
     const labelBgColor = function (data) {
@@ -368,10 +396,11 @@ class Kairoi {
 
     const data = this.data() || []
     const options = this.options()
-
-    if (!options.labella.maxPos) {
-      options.labella.maxPos = options.initialWidth - options.margin.left - options.margin.right
-      if (!options.labella.density) { options.labella.density = 1 }
+    if (options.direction === 'up' || options.direction === 'down') {
+      if (!options.labella.maxPos) {
+        options.labella.maxPos = options.initialWidth - options.margin.left - options.margin.right
+        if (!options.labella.density) { options.labella.density = 1 }
+      }
     }
     this._force = new labella.Force(options.labella)
 
@@ -382,7 +411,10 @@ class Kairoi {
         .domain(d3.extent(data, options.timeFn))
         .nice()
     }
-    options.scale.range([0, this.getInnerWidth()])
+    options.scale.range([0, (options.direction === 'left' || options.direction === 'right')
+      ? this.getInnerHeight()
+      : this.getInnerWidth()]
+    )
 
     this._createNodes()
     this.drawAxes()
