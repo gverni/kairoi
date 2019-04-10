@@ -236,12 +236,12 @@ function () {
 
       switch (options.direction) {
         case 'right':
-          this.axis = axisLeft();
+          this.axis = d3.axisLeft();
           axisTransform = 'translate(' + 0 + ',' + 0 + ')';
           break;
 
         case 'left':
-          this.axis = axisRight();
+          this.axis = d3.axisRight();
           axisTransform = 'translate(' + this.getInnerWidth() + ',' + 0 + ')';
           break;
 
@@ -251,7 +251,7 @@ function () {
           break;
 
         case 'down':
-          this.axis = axisTop();
+          this.axis = d3.axisTop();
           axisTransform = 'translate(' + 0 + ',' + 0 + ')';
           break;
       }
