@@ -84,6 +84,6 @@ If you are migrating from `d3kit-timeline` please note:
 * The default value for `direction` is `up` (instead of `right`)
 * The `data` method does not trigger a re-draw of the timeline. This needs to be called esplicitely using `draw()` ([in  roadmap for implementation](https://github.com/gverni/kairoi/issues/6))
 * No `chart.on()` doesn't work ([in roadmap for implementation](https://github.com/gverni/kairoi/issues/5))
-* The method `options()` has been replaced by 'setOptions()`
+* The method `options()` has been replaced by `setOptions()`
 * The method `resizeToFit()` is not implemented
 * The `textStyle` is no longer supported. Partial support is provided by `labelTextStyle`
