@@ -13,10 +13,21 @@ const identity = d => d
 
 class Kairoi {
   constructor (element, options) {
-    options = this.setOptions(options)
+    this.setOptions(options)
+    this._initalizeSVG(element)
+    this.updateLabelText = this.updateLabelText.bind(this)
+    this.draw = this.draw.bind(this)
+    // this._vis.on('data', this.draw)
+    // this._vis.on('options', this.draw)
+    // this._vis.on('resize', this.draw)
+    // Private properties
+    this._data = []
+  }
 
+  _initalizeSVG (element) {
     // In d3-kit this is automatically created by SvgChart
     // Here we are doing it manually
+    const options = this.setOptions(options)
     this._vis = d3.select(element)
       .append('svg')
       .attr('width', options.initialWidth)
@@ -28,15 +39,6 @@ class Kairoi {
       this._createLayer(layerName)
     })
     this._getLayer('main/axis').classed('axis', true)
-
-    this.updateLabelText = this.updateLabelText.bind(this)
-    this.draw = this.draw.bind(this)
-    this._vis.on('data', this.draw)
-    this._vis.on('options', this.draw)
-    this._vis.on('resize', this.draw)
-
-    // Private properties
-    this._data = []
   }
 
   setOptions (newOptions) {
