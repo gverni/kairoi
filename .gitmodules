@@ -1,0 +1,3 @@
+[submodule "labella.js"]
+	path = labella.js
+	url = https://github.com/twitter/labella.js
