@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/gverni/kairoi.svg?branch=master)](https://travis-ci.org/gverni/kairoi)
-[![Maintainability](https://api.codeclimate.com/v1/badges/84e9c5a07361bba6e623/maintainability)](https://codeclimate.com/github/gverni/kairoi/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/84e9c5a07361bba6e623/maintainability)](https://codeclimate.com/github/gverni/kairoi/maintainability) [![Greenkeeper badge](https://badges.greenkeeper.io/gverni/kairoi.svg)](https://greenkeeper.io/)
 
 # Kairoi
 
